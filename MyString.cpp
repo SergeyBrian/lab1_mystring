@@ -59,8 +59,8 @@ size_t MyString::capacity() const {
 
 // Расширяет строку, добавляя пустое пространство размера n, начинающееся с позиции pos
 void MyString::add_space(size_t pos, size_t n) {
-    if (this->empty()) {
-        pos = 0;
+    if (pos > m_size_) {
+        throw MyStringOutOfRangeException();
     }
 
     size_t new_size = size() + n;

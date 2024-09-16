@@ -4,6 +4,8 @@
 #include <cstring>
 #include <string>
 
+#include "MyStringException.h"
+
 class MyString {
 public:
     MyString();

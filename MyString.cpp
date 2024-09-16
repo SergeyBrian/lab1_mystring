@@ -27,7 +27,7 @@ MyString::MyString(size_t n, char c) {
 
 MyString::MyString(const MyString &s) : MyString(s.c_str()) {}
 
-MyString::MyString(std::string str) : MyString(str.c_str()) {}
+MyString::MyString(const std::string& str) : MyString(str.c_str()) {}
 
 MyString::~MyString() {
     delete[] m_data_;

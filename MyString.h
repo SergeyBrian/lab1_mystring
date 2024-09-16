@@ -7,11 +7,11 @@
 class MyString {
 public:
     MyString();
-    explicit MyString(const char *str);
+    MyString(const char *str);
     MyString(const char *str, size_t n);
     MyString(size_t n, char c);
     MyString(const MyString& s);
-    explicit MyString(std::string str);
+    explicit MyString(const std::string& str);
     ~MyString();
 
     const char *data() const;

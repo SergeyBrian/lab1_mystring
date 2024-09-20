@@ -123,20 +123,151 @@ void MyString::shrink_to_fit() {
 }
 
 
-MyString &MyString::operator=(MyString &s) {
+void MyString::assign(const char *s, size_t n) {
     char *tmp_mem = m_data_;
-    if (m_capacity_ <= s.size()) {
-        tmp_mem = new char[s.size()];
+    if (m_capacity_ <= n) {
+        tmp_mem = new char[n + 1];
+        m_capacity_ = n + 1;
     }
 
-    std::memcpy(m_data_, s.data(), s.size() + 1);
+    std::memcpy(tmp_mem, s, n + 1);
 
-    m_size_ = s.size();
+    m_size_ = n;
+
+    tmp_mem[n] = 0;
 
     if (tmp_mem != m_data_) {
         delete[] m_data_;
         m_data_ = tmp_mem;
     }
+}
+
+MyString &MyString::operator=(const MyString &s) {
+    assign(s.data(), s.size());
 
     return *this;
+}
+
+MyString &MyString::operator=(const char *s) {
+    assign(s, strlen(s));
+
+    return *this;
+}
+
+MyString &MyString::operator=(const std::string &s) {
+    assign(s.data(), s.size());
+
+    return *this;
+}
+
+MyString &MyString::operator=(char c) {
+    assign(&c, 1);
+
+    return *this;
+}
+
+
+void MyString::erase(size_t pos, size_t count) {
+    if (pos > size()) throw MyStringOutOfRangeException();
+    if (count + pos > size()) count = size() - pos;
+    std::memcpy(m_data_ + pos, m_data_ + pos + count, size() + 1 - pos - count);
+    m_size_ -= count;
+}
+
+void MyString::append(size_t n, char c) {
+    insert(size(), n, c);
+}
+
+void MyString::append(const char *c, size_t n) {
+    insert(size(), c, n);
+}
+
+void MyString::append(const char *c) {
+    insert(size(), c);
+}
+
+void MyString::append(const std::string &str, size_t n) {
+    insert(size(), str, n);
+}
+
+void MyString::append(const std::string &str) {
+    insert(size(), str);
+}
+
+bool MyString::operator==(const MyString &s) {
+    return std::strcmp(s.data(), m_data_) == 0;
+}
+
+
+bool MyString::operator!=(const MyString &s) {
+    return !(*this == s);
+}
+
+bool MyString::operator<(const MyString &s) {
+   return std::strcmp(m_data_, s.data()) < 0;
+}
+
+bool MyString::operator>(const MyString &s) {
+    return std::strcmp(m_data_, s.data()) > 0;
+}
+
+bool MyString::operator>=(const MyString &s) {
+    return *this > s || *this == s;
+}
+
+bool MyString::operator<=(const MyString &s) {
+    return *this < s || *this == s;
+}
+
+MyString MyString::operator+(const MyString &s) {
+    return *this + s.data();
+}
+
+MyString MyString::operator+(const char *s) {
+    MyString result = m_data_;
+    result.append(s);
+
+    return result;
+}
+
+MyString MyString::operator+(const std::string &s) {
+    return *this + s.data();
+}
+
+MyString MyString::operator+=(const char *s) {
+    *this = *this + s;
+    return *this;
+}
+MyString MyString::operator+=(const MyString &s) {
+    *this = *this + s;
+    return *this;
+}
+MyString MyString::operator+=(const std::string &s) {
+    *this = *this + s;
+    return *this;
+}
+
+char &MyString::operator[](size_t pos) {
+    if (pos >= m_size_) throw MyStringOutOfRangeException();
+
+    return m_data_[pos];
+}
+
+size_t MyString::find(const char *s, size_t pos) {
+    size_t l = std::strlen(s);
+    size_t res = pos;
+    for (; res <= m_size_; res++) {
+        bool success = true;
+        for (size_t i = 0; i < l; i++) {
+            if (m_data_[res + i] != s[i]) {
+                success = false;
+                break;
+            }
+        }
+        if (success) return res;
+    }
+}
+
+size_t MyString::find(const std::string& s, size_t pos) {
+    return find(s.c_str(), pos);
 }

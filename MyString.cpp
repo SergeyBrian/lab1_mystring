@@ -27,7 +27,13 @@ MyString::MyString(size_t n, char c) {
 
 MyString::MyString(const MyString &s) : MyString(s.c_str()) {}
 
-MyString::MyString(const std::string& str) : MyString(str.c_str()) {}
+MyString::MyString(const std::string &str) : MyString(str.c_str()) {}
+
+MyString::MyString(MyString &&s) {
+    m_data_ = const_cast<char *>(s.data());
+    m_size_ = s.size();
+    m_capacity_ = s.capacity();
+}
 
 MyString::~MyString() {
     delete[] m_data_;
@@ -99,11 +105,11 @@ void MyString::insert(size_t pos, const char *c) {
     insert(pos, c, std::strlen(c));
 }
 
-void MyString::insert(size_t pos, const std::string& str, size_t n) {
+void MyString::insert(size_t pos, const std::string &str, size_t n) {
     insert(pos, str.c_str(), n);
 }
 
-void MyString::insert(size_t pos, const std::string& str) {
+void MyString::insert(size_t pos, const std::string &str) {
     insert(pos, str.c_str());
 }
 

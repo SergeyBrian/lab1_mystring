@@ -14,6 +14,7 @@ public:
     MyString(size_t n, char c);
     MyString(const MyString& s);
     explicit MyString(const std::string& str);
+    MyString(MyString&& s);
     ~MyString();
 
     const char *data() const;

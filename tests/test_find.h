@@ -10,7 +10,7 @@ void test_find()
 	logger(info, "FIND TESTS");
 	std::string test_name;
 
-    std::string str = "Hello, world! Hello, world!";
+    MyString str = "Hello, world! Hello, world!";
 
 	// TEST 1
 	test_name = "TEST 1 - FIND CONST CHAR* SUBSTR";

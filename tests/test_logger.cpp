@@ -9,14 +9,14 @@ using namespace std;
 
 void logger(LogType type, string msg) {
     auto current_time = time(0);
-    char current_time_str[size("yyyy-mm-ddThh:mm:ssZ")];
+    char current_time_str[sizeof("yyyy-mm-ddThh:mm:ssZ")];
     tm calendar_datetime;
     #if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
         gmtime_r(&current_time, &calendar_datetime);
     #elif _WIN32
         gmtime_s(&calendar_datetime, &current_time);
     #endif
-    strftime(current_time_str, size(current_time_str), "%FT%TZ", &calendar_datetime);
+    strftime(current_time_str, sizeof(current_time_str), "%FT%TZ", &calendar_datetime);
     current_time_str[strlen(current_time_str) - 1] = '\0';
 
     switch (type)

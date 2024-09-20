@@ -271,3 +271,39 @@ size_t MyString::find(const char *s, size_t pos) {
 size_t MyString::find(const std::string& s, size_t pos) {
     return find(s.c_str(), pos);
 }
+
+void MyString::replace(size_t pos, size_t n, const char *s) {
+    erase(pos, n);
+    insert(pos, s);
+}
+
+MyString MyString::substr(size_t pos, size_t n) {
+    if (pos >= m_size_) throw MyStringOutOfRangeException();
+    return MyString(m_data_ + pos, n);
+}
+
+MyString MyString::substr(size_t pos) {
+    if (pos >= m_size_) throw MyStringOutOfRangeException();
+    return MyString(m_data_ + pos);
+}
+
+std::istream &operator>>(std::istream &in, MyString &s) {
+    char *buffer[IN_OP_BUFF_SIZE + 1];
+
+    while (in) {
+        in.read(reinterpret_cast<char *>(buffer), IN_OP_BUFF_SIZE);
+
+        std::streamsize bytesRead = in.gcount();
+
+        if (bytesRead > 0) {
+            s.append(reinterpret_cast<const char *>(buffer), static_cast<std::size_t>(bytesRead));
+        }
+    }
+
+    return in;
+}
+
+std::ostream& operator<<(std::ostream &out, const MyString &s) {
+    out.write(s.data(), s.size());
+    return out;
+}

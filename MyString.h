@@ -3,8 +3,11 @@
 
 #include <cstring>
 #include <string>
+#include <fstream>
 
 #include "MyStringException.h"
+
+#define IN_OP_BUFF_SIZE 64
 
 class MyString {
 public:
@@ -60,10 +63,18 @@ public:
     MyString operator+=(const MyString &s);
     MyString operator+=(const std::string &s);
 
+    friend std::istream& operator>>(std::istream &in, MyString &s);
+    friend std::ostream& operator<<(std::ostream &out, const MyString &s);
+
     char &operator[](size_t pos);
 
     size_t find(const char *s, size_t pos = 0);
     size_t find(const std::string& s, size_t pos = 0);
+
+    void replace(size_t pos, size_t n, const char *s);
+
+    MyString substr(size_t pos, size_t n);
+    MyString substr(size_t pos);
 
 private:
     char *m_data_;

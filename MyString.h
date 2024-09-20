@@ -29,6 +29,10 @@ public:
     void insert(size_t pos, const char *c);
     void insert(size_t pos, const std::string& str, size_t n);
     void insert(size_t pos, const std::string& str);
+
+    void shrink_to_fit();
+
+    MyString &operator=(MyString &s);
 private:
     char *m_data_;
     size_t m_capacity_;

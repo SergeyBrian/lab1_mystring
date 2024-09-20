@@ -78,7 +78,7 @@ void MyString::add_space(size_t pos, size_t n) {
     }
 
     std::memcpy(tmp_mem, m_data_, pos);
-    std::memcpy(tmp_mem + pos + n, m_data_ + pos, size() - pos);
+    std::memcpy(tmp_mem + pos + n, m_data_ + pos, size() + 1 - pos);
 
     m_size_ = new_size;
 
@@ -113,3 +113,30 @@ void MyString::insert(size_t pos, const std::string &str) {
     insert(pos, str.c_str());
 }
 
+void MyString::shrink_to_fit() {
+    if (m_size_ + 1 == m_capacity_) return;
+    m_capacity_ = m_size_ + 1;
+    char *tmp_mem = new char[m_capacity_];
+    std::memcpy(tmp_mem, m_data_, m_capacity_);
+    delete[] m_data_;
+    m_data_ = tmp_mem;
+}
+
+
+MyString &MyString::operator=(MyString &s) {
+    char *tmp_mem = m_data_;
+    if (m_capacity_ <= s.size()) {
+        tmp_mem = new char[s.size()];
+    }
+
+    std::memcpy(m_data_, s.data(), s.size() + 1);
+
+    m_size_ = s.size();
+
+    if (tmp_mem != m_data_) {
+        delete[] m_data_;
+        m_data_ = tmp_mem;
+    }
+
+    return *this;
+}

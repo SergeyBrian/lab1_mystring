@@ -3,6 +3,14 @@
 
 #include <string>
 
-void logger(char type, std::string msg);
+enum LogType
+{
+	info = 0,
+	success,
+	error
+};
+
+void logger(LogType type, std::string msg);
+void log_assertion(bool condition, std::string test_name);
 
 #endif

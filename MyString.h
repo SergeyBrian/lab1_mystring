@@ -48,16 +48,16 @@ public:
     MyString &operator=(const std::string &s);
     MyString &operator=(char c);
 
-    bool operator==(const MyString &s);
-    bool operator!=(const MyString &s);
-    bool operator<(const MyString &s);
-    bool operator>(const MyString &s);
-    bool operator>=(const MyString &s);
-    bool operator<=(const MyString &s);
+    bool operator==(const MyString &s) const;
+    bool operator!=(const MyString &s) const;
+    bool operator<(const MyString &s) const;
+    bool operator>(const MyString &s) const;
+    bool operator>=(const MyString &s) const;
+    bool operator<=(const MyString &s) const;
 
-    MyString operator+(const MyString &s);
-    MyString operator+(const char *s);
-    MyString operator+(const std::string &s);
+    MyString operator+(const MyString &s) const;
+    MyString operator+(const char *s) const;
+    MyString operator+(const std::string &s) const;
 
     MyString operator+=(const char *s);
     MyString operator+=(const MyString &s);
@@ -68,13 +68,13 @@ public:
 
     char &operator[](size_t pos);
 
-    size_t find(const char *s, size_t pos = 0);
-    size_t find(const std::string& s, size_t pos = 0);
+    size_t find(const char *s, size_t pos = 0) const;
+    size_t find(const std::string& s, size_t pos = 0) const;
 
     void replace(size_t pos, size_t n, const char *s);
 
-    MyString substr(size_t pos, size_t n);
-    MyString substr(size_t pos);
+    MyString substr(int pos, int n);
+    MyString substr(int pos);
 
 private:
     char *m_data_;

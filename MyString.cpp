@@ -1,4 +1,5 @@
 #include "MyString.h"
+#include <iostream>
 
 MyString::MyString() {
     m_capacity_ = 1;
@@ -30,7 +31,8 @@ MyString::MyString(const MyString &s) : MyString(s.c_str()) {}
 MyString::MyString(const std::string &str) : MyString(str.c_str()) {}
 
 MyString::MyString(MyString &&s) {
-    m_data_ = const_cast<char *>(s.data());
+    m_data_ = new char[s.capacity()];
+    memcpy(m_data_, s.data(), s.capacity());
     m_size_ = s.size();
     m_capacity_ = s.capacity();
 }
@@ -194,43 +196,43 @@ void MyString::append(const std::string &str) {
     insert(size(), str);
 }
 
-bool MyString::operator==(const MyString &s) {
+bool MyString::operator==(const MyString &s) const {
     return std::strcmp(s.data(), m_data_) == 0;
 }
 
 
-bool MyString::operator!=(const MyString &s) {
+bool MyString::operator!=(const MyString &s) const {
     return !(*this == s);
 }
 
-bool MyString::operator<(const MyString &s) {
+bool MyString::operator<(const MyString &s) const {
    return std::strcmp(m_data_, s.data()) < 0;
 }
 
-bool MyString::operator>(const MyString &s) {
+bool MyString::operator>(const MyString &s) const {
     return std::strcmp(m_data_, s.data()) > 0;
 }
 
-bool MyString::operator>=(const MyString &s) {
+bool MyString::operator>=(const MyString &s) const {
     return *this > s || *this == s;
 }
 
-bool MyString::operator<=(const MyString &s) {
+bool MyString::operator<=(const MyString &s) const {
     return *this < s || *this == s;
 }
 
-MyString MyString::operator+(const MyString &s) {
+MyString MyString::operator+(const MyString &s) const {
     return *this + s.data();
 }
 
-MyString MyString::operator+(const char *s) {
+MyString MyString::operator+(const char *s) const {
     MyString result = m_data_;
     result.append(s);
 
     return result;
 }
 
-MyString MyString::operator+(const std::string &s) {
+MyString MyString::operator+(const std::string &s) const {
     return *this + s.data();
 }
 
@@ -253,7 +255,8 @@ char &MyString::operator[](size_t pos) {
     return m_data_[pos];
 }
 
-size_t MyString::find(const char *s, size_t pos) {
+size_t MyString::find(const char *s, size_t pos) const {
+    if (pos >= m_size_) throw MyStringOutOfRangeException();
     size_t l = std::strlen(s);
     size_t res = pos;
     for (; res <= m_size_; res++) {
@@ -268,7 +271,7 @@ size_t MyString::find(const char *s, size_t pos) {
     }
 }
 
-size_t MyString::find(const std::string& s, size_t pos) {
+size_t MyString::find(const std::string& s, size_t pos) const {
     return find(s.c_str(), pos);
 }
 
@@ -277,12 +280,12 @@ void MyString::replace(size_t pos, size_t n, const char *s) {
     insert(pos, s);
 }
 
-MyString MyString::substr(size_t pos, size_t n) {
+MyString MyString::substr(int pos, int n) {
     if (pos >= m_size_) throw MyStringOutOfRangeException();
     return MyString(m_data_ + pos, n);
 }
 
-MyString MyString::substr(size_t pos) {
+MyString MyString::substr(int pos) {
     if (pos >= m_size_) throw MyStringOutOfRangeException();
     return MyString(m_data_ + pos);
 }
